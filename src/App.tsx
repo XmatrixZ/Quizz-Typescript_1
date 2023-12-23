@@ -4,7 +4,7 @@ import { fetchQuizQuestions } from "./API";
 import QuestionCards from "./components/QuestionCards";
 //Types
 import { QuestionsState, Difficulty } from "./API";
-
+// Styles
 import { GlobalStyle, Wrapper } from "./App.styles";
 
 export type AnswerObject = {
@@ -18,26 +18,33 @@ const TOTAL_QUESTIONS = 10;
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<QuestionsState[]>([]);
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState(0); 
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
 
   console.log(questions);
 
+  //* This function is used to start the Quiz game
   const startTrivia = async () => {
+    
     setLoading(true);
     setGameOver(false);
+
     const newQuestions = await fetchQuizQuestions(
       TOTAL_QUESTIONS,
       Difficulty.EASY
-    );
-    setQuestions(newQuestions);
-    setScore(0);
+    ); //* Fetches the Questions that need to be displayed. Takes Total Number of Questions and Difficulty to get Questions from the API
+
+    setQuestions(newQuestions); //* Stores the generated Questions once per game
+    setScore(0);//* Sets the initial Score
+
     setUserAnswers([]);
     setNumber(0);
     setLoading(false);
   };
+
+  // * This function is used to check the answer of the user which will take an input from only an html button hence the type written above.
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!gameOver) {
       const answer = e.currentTarget.value;
@@ -52,16 +59,19 @@ const App = () => {
       setUserAnswers((prev) => [...prev, answerObject]);
     }
   };
+
+  // * Updating the Question count
   const nextQuestion = () => {
     const nextQuestion = number + 1;
     if (nextQuestion === TOTAL_QUESTIONS) setGameOver(true);
     else setNumber(nextQuestion);
   };
+
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <h1>Computer Quizz</h1>
+        <h1>Computer Quiz</h1>
         {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
           <button className="start" onClick={startTrivia}>
             Start

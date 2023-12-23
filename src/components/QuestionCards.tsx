@@ -3,6 +3,7 @@ import { AnswerObject } from "../App";
 
 import { Wrapper, ButtonWrapper } from "./QuestionsCard.style"; 
 
+// * Type for the functional Component Question Card
 type Props = {
   question: string;
   answers: string[];
